@@ -121,3 +121,34 @@ func bmMatch(text string, pattern string) int {
 	return -1
 
 }
+
+func hammingDistance(text string, pattern string) (int, float32) {
+
+	var (
+		i, j, mismatch, min, minpos int
+		percentage                  float32
+	)
+
+	min = -1
+	minpos = 0
+	for i = 0; i <= (len(text) - len(pattern)); i++ {
+		mismatch = 0
+		for j = 0; j <= len(pattern)-1; j++ {
+			if text[i+j] != pattern[j] {
+				mismatch += 1
+			}
+			if mismatch >= min && min != -1 {
+				break
+			}
+		}
+		if mismatch < min || min == -1 {
+			min = mismatch
+			minpos = i
+		}
+	}
+
+	percentage = (float32(len(pattern) - min)) / (float32(len(pattern)))
+
+	return minpos, percentage
+
+}
