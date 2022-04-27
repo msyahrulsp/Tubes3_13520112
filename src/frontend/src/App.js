@@ -10,6 +10,7 @@ import './styles/base.scss';
 import { Home } from "./Page/Home";
 import { AddDNA } from "./Page/AddDNA";
 import { CheckDNA } from "./Page/CheckDNA";
+import { FindDNA } from "./Page/FindDNA";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/add-dna" element={<AddDNA />} />
             <Route path="/check-dna" element={<CheckDNA />} />
+            <Route path="/find-dna" element={<FindDNA />} />
           </Routes>
         </div>
       </Router>

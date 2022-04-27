@@ -9,13 +9,17 @@ export const Home = () => {
         <Template>
             <div className="home-container">
                 <div className="text-wrapper">
-                    <p>Penerapan String Matching dan</p>
-                    <p>Regular Expression dalam</p>
-                    <p>DNA Pattern Matching</p>
+                    <div className="title-wrapper">
+                        <p>Penerapan String Matching dan</p>
+                        <p>Regular Expression dalam</p>
+                        <p>DNA Pattern Matching</p>
+                    </div>
                     <h1>Try it Now!</h1>
-                    <Button>
-                        <a href="/add-dna">Add DNA →</a>
-                    </Button>
+                    <a href="/add-dna">
+                        <Button>
+                            Add DNA
+                        </Button>
+                    </a>
                 </div>
             </div>
         </Template>

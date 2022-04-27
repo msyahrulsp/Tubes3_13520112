@@ -7,6 +7,15 @@
     margin-top: 80px;
 
     .text-wrapper {
+        .title-wrapper {
+            padding: 2.5vh 2vw;
+            background: #00688B;
+            color: #EDEDED;
+            width: fit-content;
+            border-radius: 10px;
+            margin-bottom: 5px;
+        }
+
         h1 {
             font-size: 2.5em;
             letter-spacing: 0.01em;
@@ -17,12 +26,6 @@
             font-size: 1em;
             margin-bottom: 1.2vh;
             letter-spacing: 0.15em;
-        }
-
-        a {
-            font-size: 1.5em;
-            margin-bottom: 1.2vh;
-            color: #EDEDED;
         }
     }
 }

@@ -31,6 +31,12 @@ export const Navbar = () => {
                     className="nav-button">
                     <h2>Check DNA</h2>
                 </NavLink>
+                <NavLink 
+                    exact
+                    to="/find-dna"
+                    className="nav-button">
+                    <h2>Find DNA</h2>
+                </NavLink>
             </div>
         </div>
     )
