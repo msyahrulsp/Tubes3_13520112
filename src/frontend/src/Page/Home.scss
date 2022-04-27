@@ -1,0 +1,32 @@
+.home-container {
+    border-radius: 5px;
+    padding: 10px 7px;
+    background-color: white;
+    max-width: 1160px;
+    margin: 0 auto;
+    margin-top: 10em;
+
+    .text-wrapper {
+        padding: 8vh 5vw;
+        h1 {
+            font-size: 2.5em;
+            letter-spacing: 0.01em;
+            margin-bottom: 2vh;
+        }
+
+        p {
+            font-size: 1em;
+            margin-bottom: 1.2vh;
+            letter-spacing: 0.15em;
+        }
+
+        a {
+            font-size: 1.5em;
+            margin-bottom: 1.2vh;
+            background-color: #474973;
+            border-radius: 5px;
+            color: #EDEDED;
+            padding: 0.5vh 1vw;
+        }
+    }
+}
