@@ -3,6 +3,7 @@ import {
   Routes,
   Route
 } from 'react-router-dom';
+import { AnimatePresence } from "framer-motion";
 
 import './styles/base.scss';
 
@@ -12,15 +13,17 @@ import { CheckDNA } from "./Page/CheckDNA";
 
 function App() {
   return (
-    <Router>
-      <div>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/add-dna" element={<AddDNA />} />
-          <Route path="/check-dna" element={<CheckDNA />} />
-        </Routes>
-      </div>
-    </Router>
+    <AnimatePresence exitBeforeEnter>
+      <Router>
+        <div>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/add-dna" element={<AddDNA />} />
+            <Route path="/check-dna" element={<CheckDNA />} />
+          </Routes>
+        </div>
+      </Router>
+    </AnimatePresence>
   );
 }
 

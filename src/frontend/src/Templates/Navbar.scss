@@ -1,0 +1,46 @@
+.navbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 1em 0;
+    backdrop-filter: blur(5px);
+
+    .nav-header {
+        display: flex;
+        opacity: 0.8;
+        flex-direction: row;
+        margin-left: 3em;
+        color: #EDEDED;
+        .nav-logo {
+            cursor: default;
+            padding: 0.4em;
+        }
+
+        img {
+            width: 35px;
+            height: 35px;
+            margin-right: 5px;
+        }
+    }
+
+    .nav-links {
+        margin-right: 3em;
+        display: flex;
+        flex-direction: row;
+        gap: 50px;
+
+        .nav-button {
+            color: #EDEDED;
+            opacity: 0.8;
+            transition: all 0.2s ease-in-out;
+            h2 {
+                padding: 0.4em;
+                font-size: 1.1em;
+            }
+        }
+
+        .nav-button:hover {
+            opacity: 1;
+        }
+    }
+}
