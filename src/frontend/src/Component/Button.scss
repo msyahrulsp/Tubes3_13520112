@@ -1,11 +1,12 @@
 .button {
-    padding: 0.75rem 1.7rem;
+    padding: 0.5rem 1.7rem;
     background: #03A89E;
     color: #EDEDED;
     border-radius: 10px;
     transition: all 0.15s ease-in-out;
     font-size: 16px;
     cursor: pointer;
+    font-family: "OpenSans-Regular";
 }
 
 .button:hover {

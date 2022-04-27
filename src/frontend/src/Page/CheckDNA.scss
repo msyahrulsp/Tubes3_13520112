@@ -9,7 +9,9 @@
     flex-direction: column;
     align-items: center;
 
-    .addna-form {
-
+    .checkdna-form {
+        display: flex;
+        flex-direction: row;
+        gap: 100px;
     }
 }

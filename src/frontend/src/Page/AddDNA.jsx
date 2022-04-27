@@ -3,6 +3,7 @@ import "./AddDNA.scss";
 
 import { Template } from '../Templates/Template';
 import { Button } from '../Component/Button';
+import { Form } from "../Component/Form";
 
 export const AddDNA = () => {
     return (
@@ -12,10 +13,15 @@ export const AddDNA = () => {
                     <h3>Add DNA</h3>
                 </div>
                 <div className="addna-form">
-                    <div className="addna-form-nama">
-                    </div>
-                    <div className="addna-form-file">
-                    </div>
+                    <Form
+                        title="Disease"
+                        type="text"
+                        placeholder="Enter Disease Name"
+                    />
+                    <Form
+                        title="DNA Sequence"
+                        type="file"
+                    />
                 </div>
                 <div className="addna-button">
                     <Button>

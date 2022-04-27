@@ -10,6 +10,8 @@
     align-items: center;
 
     .addna-form {
-
+        display: flex;
+        flex-direction: row;
+        gap: 350px;
     }
 }
