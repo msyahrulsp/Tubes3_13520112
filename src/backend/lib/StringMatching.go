@@ -1,6 +1,6 @@
-package StringMatching
+package lib
 
-func computeFail(pattern string) []int {
+func ComputeFail(pattern string) []int {
 
 	var (
 		fail    []int
@@ -30,7 +30,7 @@ func computeFail(pattern string) []int {
 
 }
 
-func kmpMatch(text string, pattern string) int {
+func KmpMatch(text string, pattern string) int {
 
 	var (
 		fail       []int
@@ -38,7 +38,7 @@ func kmpMatch(text string, pattern string) int {
 	)
 
 	n, m, i, j = len(text), len(pattern), 0, 0
-	fail = computeFail(pattern)
+	fail = ComputeFail(pattern)
 
 	for i < n {
 		if pattern[j] == text[i] {
@@ -58,7 +58,7 @@ func kmpMatch(text string, pattern string) int {
 
 }
 
-func buildLast(pattern string) map[string]int {
+func BuildLast(pattern string) map[string]int {
 
 	var (
 		last map[string]int
@@ -75,14 +75,14 @@ func buildLast(pattern string) map[string]int {
 
 }
 
-func bmMatch(text string, pattern string) int {
+func BmMatch(text string, pattern string) int {
 
 	var (
 		last                map[string]int
 		i, j, n, m, lo, min int
 	)
 
-	last = buildLast(pattern)
+	last = BuildLast(pattern)
 	n, m = len(text), len(pattern)
 	i, j = m-1, m-1
 
@@ -122,7 +122,7 @@ func bmMatch(text string, pattern string) int {
 
 }
 
-func hammingDistance(text string, pattern string) (int, float32) {
+func HammingDistance(text string, pattern string) (int, float32) {
 
 	var (
 		i, j, mismatch, min, minpos int

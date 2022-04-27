@@ -6,7 +6,7 @@ import (
 )
 
 func Connect() *sql.DB {
-	db, err := sql.Open("mysql", "user:password@tcp(localhost:3306)/Tubes3_13520112")
+	db, err := sql.Open("mysql", "AMOYSC0JU4:Lc98Bq6A1y@tcp(remotemysql.com:3306)/AMOYSC0JU4")
 
 	if err != nil {
 		log.Fatal(err)

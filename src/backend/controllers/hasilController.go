@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"db/database"
-	"db/model"
+	"backend/database"
+	"backend/model"
 
 	"github.com/gorilla/mux"
 )

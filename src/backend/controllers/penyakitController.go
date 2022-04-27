@@ -1,12 +1,13 @@
 package controllers
 
 import (
+	"backend/lib"
 	"encoding/json"
 	"log"
 	"net/http"
 
-	"db/database"
-	"db/model"
+	"backend/database"
+	"backend/model"
 
 	"github.com/gorilla/mux"
 )
@@ -72,6 +73,8 @@ func GetPenyakitByNamaPenyakit(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddPenyakit(w http.ResponseWriter, r *http.Request) {
+	// fmt.Println("MASOKKKKKKKKKKK")
+	// w.Header().Set("Access-Control-Allow-Origin", "*")
 	var penyakit model.Penyakit
 	var arr_penyakit []model.Penyakit
 	var response model.ResponsePenyakit
@@ -79,30 +82,36 @@ func AddPenyakit(w http.ResponseWriter, r *http.Request) {
 	db := database.Connect()
 	defer db.Close()
 
-	err := r.ParseMultipartForm(4096)
+	err := r.ParseMultipartForm(32 << 20)
 	  if err != nil {
 		  panic(err)
 	  }
 
-	_, err = db.Exec("INSERT INTO Penyakit (NamaPenyakit, SequenceDNA) values (?,?)",
-		r.FormValue("namaPenyakit"),
-		r.FormValue("sequenceDNA"),
-	)
-
-	if err != nil {
-		log.Print(err)
-		response.Status = 404
-		response.Message = "Not Found"
+	if lib.IsValidDNA(r.FormValue("sequenceDNA")) {
+		_, err = db.Exec("INSERT INTO Penyakit (NamaPenyakit, SequenceDNA) values (?,?)",
+			r.FormValue("namaPenyakit"),
+			r.FormValue("sequenceDNA"),
+		)
+	
+		if err != nil {
+			log.Print(err)
+			response.Status = 404
+			response.Message = "Not Found"
+		} else {
+			penyakit.NamaPenyakit = r.FormValue("namaPenyakit")
+			penyakit.SequenceDNA = r.FormValue("sequenceDNA")
+			arr_penyakit = append(arr_penyakit, penyakit)
+	
+			response.Status = 200
+			response.Message = "OK"
+			response.Data = arr_penyakit
+			log.Print("Insert data to database")
+		}
 	} else {
-		penyakit.NamaPenyakit = r.FormValue("namaPenyakit")
-		penyakit.SequenceDNA = r.FormValue("sequenceDNA")
-		arr_penyakit = append(arr_penyakit, penyakit)
-
-		response.Status = 200
-		response.Message = "OK"
-		response.Data = arr_penyakit
-		log.Print("Insert data to database")
+		response.Status = 400
+		response.Message = "Bad Request"
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }

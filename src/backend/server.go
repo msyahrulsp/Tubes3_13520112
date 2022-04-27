@@ -1,24 +1,15 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 
-	"db/controllers"
+	"backend/controllers"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
+
+	"github.com/rs/cors"
 )
-
-// func main() {
-// 	initDB()
-// 	log.Println("Starting the HTTP server on port 8090")
-
-// 	router := mux.NewRouter().StrictSlash(true)
-// 	initaliseHandlers(router)
-// 	log.Fatal(http.ListenAndServe(":8090", router))
-// }
 
 func initaliseHandlers(router *mux.Router) {
 	router.HandleFunc("/penyakit", controllers.AddPenyakit).Methods("POST")
@@ -33,11 +24,11 @@ func initaliseHandlers(router *mux.Router) {
 }
 
 func main() {
+	r := mux.NewRouter()
+	initaliseHandlers(r)
 
-	router := mux.NewRouter()
-	// router.HandleFunc("/penyakit", getAllPenyakit).Methods("GET")
-	initaliseHandlers(router)
-	http.Handle("/", router)
-	fmt.Println("Connected to port 8090")
-	log.Fatal(http.ListenAndServe(":8090", router))
+	// Use default options
+	handler := cors.Default().Handler(r)
+
+	http.ListenAndServe(":8090", handler)
 }
