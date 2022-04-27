@@ -13,5 +13,8 @@ export const Template = (props) => (
         >
             {props.children}
         </motion.div>
+        <div style={{padding:"2.5em"}}>
+
+        </div>
     </div>
 );
