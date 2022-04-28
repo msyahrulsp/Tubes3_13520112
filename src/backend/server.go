@@ -1,7 +1,10 @@
 package main
 
 import (
+	"io"
+	"log"
 	"net/http"
+	"os"
 
 	"backend/controllers"
 
@@ -12,10 +15,16 @@ import (
 )
 
 func initaliseHandlers(router *mux.Router) {
+	router.HandleFunc("/", running)
+
 	router.HandleFunc("/penyakit", controllers.AddPenyakit).Methods("POST")
 
 	router.HandleFunc("/hasil", controllers.AddHasil).Methods("POST")
 	router.HandleFunc("/hasil/find", controllers.GetHasilByQuery).Methods("POST")
+}
+
+func running (w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, "Server is running...")
 }
 
 func main() {
@@ -25,5 +34,8 @@ func main() {
 	// Use default options
 	handler := cors.Default().Handler(r)
 
-	http.ListenAndServe(":8090", handler)
+	port := os.Getenv("PORT")
+	// http.ListenAndServe(":8090", handler)
+	log.Print("Listening on :" + port)
+	log.Fatal(http.ListenAndServe(":" + port, handler))
 }
