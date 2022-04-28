@@ -134,18 +134,25 @@ func AddHasil(w http.ResponseWriter, r *http.Request) {
 	rows, err := db.Query("SELECT * FROM Penyakit WHERE NamaPenyakit = ?", r.FormValue("namaPenyakit"))
 
 	if err != nil {
-		log.Print(err)
 		response.Status = 404
 		response.Message = "Not Found"
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
 		return
 	}
-
+	
 	for rows.Next() {
 		if err := rows.Scan(&penyakit.NamaPenyakit, &penyakit.SequenceDNA); err != nil {
 			log.Fatal(err.Error())
 		}
+	}
+
+	if (model.Penyakit{}) == penyakit {
+		response.Status = 400
+		response.Message = "Bad Request"
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
 	}
 
 	// Tes KMP, kalo gagal pakai hamming
