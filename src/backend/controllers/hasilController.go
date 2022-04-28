@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"backend/database"
+	"backend/lib"
 	"backend/model"
 
 	"github.com/gorilla/mux"
@@ -143,28 +145,56 @@ func GetHasilByTanggalAndNamaPenyakit(w http.ResponseWriter, r *http.Request) {
 
 func AddHasil(w http.ResponseWriter, r *http.Request) {
 	var hasil model.Hasil
+	var penyakit model.Penyakit
 	var arr_hasil []model.Hasil
 	var response model.ResponseHasil
+	var persentase float32
+	var hasilTes bool
 
 	db := database.Connect()
 	defer db.Close()
 
-	err := r.ParseMultipartForm(4096)
-	  if err != nil {
-		  panic(err)
-	  }
+	if !lib.IsValidDNA(r.FormValue("DNA")) {
+		response.Status = 400
+		response.Message = "Bad Request"
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
+	}
 
-	// Panggil algoritma pattern matching
-	// DNA := r.FormValue("DNA")
-	
-	// persentase = algo pattern matching 
-	persentase := 100 
+	tanggal := time.Now().Format("2006-01-02")
 
-	// hasil = algo pattern matching
-	hasilTes := true
+	rows, err := db.Query("SELECT * FROM Penyakit WHERE NamaPenyakit = ?", r.FormValue("namaPenyakit"))
+
+	if err != nil {
+		log.Print(err)
+		response.Status = 404
+		response.Message = "Not Found"
+	}
+
+	for rows.Next() {
+		if err := rows.Scan(&penyakit.NamaPenyakit, &penyakit.SequenceDNA); err != nil {
+			log.Fatal(err.Error())
+		}
+	}
+
+	// Tes KMP, kalo gagal pakai hamming
+	kmp := lib.KmpMatch(r.FormValue("DNA"), penyakit.SequenceDNA)
+
+	if (kmp == -1) {
+		_, persentase = lib.HammingDistance(r.FormValue("DNA"), penyakit.SequenceDNA) 
+	} else {
+		persentase = 100
+	}
+
+	if (persentase >= 80) {
+		hasilTes = true
+	} else {
+		hasilTes = false
+	}
 	
-	_, err = db.Exec("INSERT INTO Hasil (Tanggal, NamaPengguna, NamaPenyakit, Persentase, Hasil) values (?,?)",
-		r.FormValue("tanggal"),
+	_, err = db.Exec("INSERT INTO Hasil (Tanggal, NamaPengguna, NamaPenyakit, Persentase, Hasil) values (?,?,?,?,?)",
+		tanggal,
 		r.FormValue("namaPengguna"),
 		r.FormValue("namaPenyakit"),
 		persentase,
@@ -176,12 +206,11 @@ func AddHasil(w http.ResponseWriter, r *http.Request) {
 		response.Status = 404
 		response.Message = "Not Found"
 	} else {
-		hasil.Tanggal = r.FormValue("tanggal")
+		hasil.Tanggal = tanggal
 		hasil.NamaPengguna = r.FormValue("namaPengguna")
 		hasil.NamaPenyakit = r.FormValue("namaPenyakit")
 		hasil.Persentase = persentase
 		hasil.Hasil = hasilTes
-		hasil.DNA = r.FormValue("DNA")
 		arr_hasil = append(arr_hasil, hasil)
 
 		response.Status = 200

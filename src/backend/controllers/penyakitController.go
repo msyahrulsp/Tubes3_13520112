@@ -73,8 +73,6 @@ func GetPenyakitByNamaPenyakit(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddPenyakit(w http.ResponseWriter, r *http.Request) {
-	// fmt.Println("MASOKKKKKKKKKKK")
-	// w.Header().Set("Access-Control-Allow-Origin", "*")
 	var penyakit model.Penyakit
 	var arr_penyakit []model.Penyakit
 	var response model.ResponsePenyakit
