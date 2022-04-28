@@ -4,16 +4,15 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"backend/database"
 	"backend/lib"
 	"backend/model"
-
-	"github.com/gorilla/mux"
 )
 
-func GetAllHasil(w http.ResponseWriter, r *http.Request) {
+func GetHasilByQuery(w http.ResponseWriter, r *http.Request) {
 	var hasil model.Hasil
 	var arr_hasil []model.Hasil
 	var response model.ResponseHasil
@@ -21,107 +20,74 @@ func GetAllHasil(w http.ResponseWriter, r *http.Request) {
 	db := database.Connect()
 	defer db.Close()
 
-	rows, err := db.Query("SELECT Tanggal, NamaPengguna, NamaPenyakit, Persentase, Hasil FROM Hasil")
-	if err != nil {
-		log.Print(err)
-		response.Status = 404
-		response.Message = "Not Found"
-	} else {
-		for rows.Next() {
-			if err := rows.Scan(&hasil.Tanggal, &hasil.NamaPengguna, &hasil.NamaPenyakit, &hasil.Persentase, &hasil.Hasil) 
-			err != nil {
-				log.Fatal(err.Error())
-			} else {
-				arr_hasil = append(arr_hasil, hasil)
-				response.Status = 200
-				response.Message = "OK"
-				response.Data = arr_hasil
-			}
-		}
+	q := lib.IsValidQuery(r.FormValue("query"))
+
+	if (q == -1) {
+		response.Status = 400
+		response.Message = "Bad Request"
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
-}
-
-func GetHasilByNamaPenyakit(w http.ResponseWriter, r *http.Request) {
-	var hasil model.Hasil
-	var arr_hasil []model.Hasil
-	var response model.ResponseHasil
-
-	db := database.Connect()
-	defer db.Close()
-
-	vars := mux.Vars(r)
-
-	rows, err := db.Query("SELECT Tanggal, NamaPengguna, NamaPenyakit, Persentase, Hasil FROM Hasil WHERE NamaPenyakit = ?", vars["namaPenyakit"])
-	if err != nil {
-		log.Print(err)
-		response.Status = 404
-		response.Message = "Not Found"
-	} else {
-		for rows.Next() {
-			if err := rows.Scan(&hasil.Tanggal, &hasil.NamaPengguna, &hasil.NamaPenyakit, &hasil.Persentase, &hasil.Hasil)
-			err != nil {
-				log.Fatal(err.Error())
-			} else {
-				arr_hasil = append(arr_hasil, hasil)
-			}
+	
+	if (q == 0) {
+		date, err := time.Parse("02-01-2006", strings.ReplaceAll(r.FormValue("query"), "/", "-"))
+		if err != nil {
+			panic(err)
 		}
-		response.Status = 200
-		response.Message = "OK"
-		response.Data = arr_hasil
-	}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
-}
-
-func GetHasilByTanggal(w http.ResponseWriter, r *http.Request) {
-	var hasil model.Hasil
-	var arr_hasil []model.Hasil
-	var response model.ResponseHasil
-
-	db := database.Connect()
-	defer db.Close()
-
-	vars := mux.Vars(r)
-
-	// To Do: Manipulate string tanggal
-
-	rows, err := db.Query("SELECT Tanggal, NamaPengguna, NamaPenyakit, Persentase, Hasil FROM Hasil WHERE Tanggal = ?", vars["tanggal"])
-	if err != nil {
-		log.Print(err)
-		response.Status = 404
-		response.Message = "Not Found"
-	} else {
-		for rows.Next() {
-			if err := rows.Scan(&hasil.Tanggal, &hasil.NamaPengguna, &hasil.NamaPenyakit, &hasil.Persentase, &hasil.Hasil)
-			err != nil {
-				log.Fatal(err.Error())
-			} else {
-				arr_hasil = append(arr_hasil, hasil)
+		rows, err := db.Query("SELECT Tanggal, NamaPengguna, NamaPenyakit, Persentase, Hasil FROM Hasil WHERE Tanggal = ?", date.Format("2006-01-02"))
+		if err != nil {
+			log.Print(err)
+			response.Status = 404
+			response.Message = "Not Found"
+		} else {
+			for rows.Next() {
+				if err := rows.Scan(&hasil.Tanggal, &hasil.NamaPengguna, &hasil.NamaPenyakit, &hasil.Persentase, &hasil.Hasil)
+				err != nil {
+					log.Fatal(err.Error())
+				} else {
+					arr_hasil = append(arr_hasil, hasil)
+				}
 			}
+			response.Status = 200
+			response.Message = "OK"
+			response.Data = arr_hasil
 		}
-		response.Status = 200
-		response.Message = "OK"
-		response.Data = arr_hasil
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
-}
 
-func GetHasilByTanggalAndNamaPenyakit(w http.ResponseWriter, r *http.Request) {
-	var hasil model.Hasil
-	var arr_hasil []model.Hasil
-	var response model.ResponseHasil
+	if (q == 1) {
+		rows, err := db.Query("SELECT Tanggal, NamaPengguna, NamaPenyakit, Persentase, Hasil FROM Hasil WHERE NamaPenyakit = ?", r.FormValue("query"))
+		if err != nil {
+			log.Print(err)
+			response.Status = 404
+			response.Message = "Not Found"
+		} else {
+			for rows.Next() {
+				if err := rows.Scan(&hasil.Tanggal, &hasil.NamaPengguna, &hasil.NamaPenyakit, &hasil.Persentase, &hasil.Hasil)
+				err != nil {
+					log.Fatal(err.Error())
+				} else {
+					arr_hasil = append(arr_hasil, hasil)
+				}
+			}
+			response.Status = 200
+			response.Message = "OK"
+			response.Data = arr_hasil
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
+	}
 
-	db := database.Connect()
-	defer db.Close()
-
-	vars := mux.Vars(r)
-
-	// To Do: Manipulate string tanggal and nama penyakit
-
-	rows, err := db.Query("SELECT Tanggal, NamaPengguna, NamaPenyakit, Persentase, Hasil FROM Hasil WHERE Tanggal = ? AND NamaPenyakit = ?", vars["tanggal"], vars["namaPenyakit"])
+	queries := strings.Split(r.FormValue("query"), " ")
+	date, err := time.Parse("02-01-2006", strings.ReplaceAll(queries[0], "/", "-"))
+		if err != nil {
+			panic(err)
+		}
+	rows, err := db.Query("SELECT Tanggal, NamaPengguna, NamaPenyakit, Persentase, Hasil FROM Hasil WHERE Tanggal = ? AND NamaPenyakit = ?", date.Format("2006-01-02"), queries[1])
 	if err != nil {
 		log.Print(err)
 		response.Status = 404
@@ -154,7 +120,7 @@ func AddHasil(w http.ResponseWriter, r *http.Request) {
 	db := database.Connect()
 	defer db.Close()
 
-	if !lib.IsValidDNA(r.FormValue("DNA")) {
+	if !lib.IsValidDNA(r.FormValue("DNA")) || r.FormValue("namaPengguna") == "" {
 		response.Status = 400
 		response.Message = "Bad Request"
 		w.Header().Set("Content-Type", "application/json")
@@ -163,6 +129,7 @@ func AddHasil(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tanggal := time.Now().Format("2006-01-02")
+	// tanggal := time.Now().Format("02-01-2006")
 
 	rows, err := db.Query("SELECT * FROM Penyakit WHERE NamaPenyakit = ?", r.FormValue("namaPenyakit"))
 

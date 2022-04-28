@@ -13,14 +13,9 @@ import (
 
 func initaliseHandlers(router *mux.Router) {
 	router.HandleFunc("/penyakit", controllers.AddPenyakit).Methods("POST")
-	router.HandleFunc("/penyakit", controllers.GetAllPenyakit).Methods("GET")
-	router.HandleFunc("/penyakit/penyakit={namaPenyakit}", controllers.GetPenyakitByNamaPenyakit).Methods("GET")
 
 	router.HandleFunc("/hasil", controllers.AddHasil).Methods("POST")
-	router.HandleFunc("/hasil", controllers.GetAllHasil).Methods("GET")
-	router.HandleFunc("/hasil/tanggal={tanggal}", controllers.GetHasilByTanggal).Methods("GET")
-	router.HandleFunc("/hasil/namapenyakit={namaPenyakit}", controllers.GetHasilByNamaPenyakit).Methods("GET")
-	router.HandleFunc("/hasil/tanggal={tanggal}/namapenyakit={namaPenyakit}", controllers.GetHasilByTanggalAndNamaPenyakit).Methods("GET")
+	router.HandleFunc("/hasil/find", controllers.GetHasilByQuery).Methods("POST")
 }
 
 func main() {
