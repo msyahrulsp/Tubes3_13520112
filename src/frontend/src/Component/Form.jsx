@@ -9,7 +9,6 @@ export const Form = (props) => {
                 placeholder={props.placeholder}
                 onChange={props.onChange}
             />
-            <p className="error">{props.error}</p>
         </div>
     )
 }

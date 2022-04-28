@@ -9,9 +9,10 @@ import { Form } from "../Component/Form";
 
 export const FindDNA = () => {
   const [query, setQuery] = useState("");
+  const [data, setData] = useState();
+  const [message, setMessage] = useState();
 
   const onChangeQuery = (event) => {
-    //   console.log(event.target.value)
     setQuery(event.target.value);
   };
 
@@ -21,12 +22,19 @@ export const FindDNA = () => {
     };
     try {
       axiosConfig.post(`/hasil/find`, qs.stringify(body)).then((res) => {
-        console.log(res);
+        if (res.data.message === "OK") {
+          setData(res.data.Data);
+          setMessage("");
+        } else {
+          setMessage("Please Check Your Input")
+        }
+        console.log(res)
       });
     } catch (err) {
       alert(err.toString());
     }
   };
+
   return (
     <Template>
       <div className="finddna-container">
@@ -45,6 +53,17 @@ export const FindDNA = () => {
             <p>Submit</p>
           </Button>
         </div>
+        <div className="finddna-result">
+          {data !== undefined ? data.map((item) => {
+            let bool = item.hasil === 1 ? "True" : "False";
+            return (
+              <div className="finddna-result-item">
+                <p>{item.tanggal} - {item.namaPengguna} - {item.namaPenyakit} - {item.persentase}% - {bool}</p>
+              </div>
+            );
+          }) : null}
+        </div>
+        <p className="message">{message}</p>
       </div>
     </Template>
   );

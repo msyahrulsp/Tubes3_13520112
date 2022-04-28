@@ -11,22 +11,20 @@ export const CheckDNA = () => {
   const [namaPengguna, setNamaPengguna] = useState("");
   const [namaPenyakit, setNamaPenyakit] = useState("");
   const [DNA, setDNA] = useState("");
+  const [message, setMessage] = useState("");
+  const [data, setData] = useState();
 
   const onChangeDisease = (event) => {
-    //   console.log(event.target.value)
     setNamaPenyakit(event.target.value);
   };
 
   const onChangeNamaPengguna = (event) => {
-    //   console.log(event.target.value)
     setNamaPengguna(event.target.value);
   };
 
   const onInputDNAHandler = (event) => {
     const reader = new FileReader();
     reader.onloadend = (e) => {
-      //   const content = e.target.result;
-      //   console.log('file content',  content)
       setDNA(e.target.result);
     };
     reader.readAsText(event.target.files[0]);
@@ -40,6 +38,12 @@ export const CheckDNA = () => {
     };
     try {
       axiosConfig.post(`/hasil`, qs.stringify(body)).then((res) => {
+        if (res.data.message === "OK") {
+          setData(res.data.Data);
+          setMessage("");
+        } else {
+          setMessage("Please Check Your Input")
+        }
         console.log(res);
       });
     } catch (err) {
@@ -73,6 +77,17 @@ export const CheckDNA = () => {
             <p>Submit</p>
           </Button>
         </div>
+        <div className="addna-result">
+          {data !== undefined ? data.map((item) => {
+            let bool = item.hasil === 1 ? "True" : "False";
+            return (
+              <div className="addna-result-item">
+                <p>{item.tanggal} - {item.namaPengguna} - {item.namaPenyakit} - {item.persentase}% - {bool}</p>
+              </div>
+            );
+          }) : null}
+        </div>
+        <p className="message">{message}</p>
       </div>
     </Template>
   );

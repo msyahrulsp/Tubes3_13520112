@@ -10,17 +10,15 @@ import { Form } from "../Component/Form";
 export const AddDNA = () => {
   const [namaPenyakit, setNamaPenyakit] = useState("");
   const [sequenceDNA, setSequenceDNA] = useState("");
+  const [message, setMessage] = useState("");
 
   const onChangeDisease = (event) => {
-    //   console.log(event.target.value)
     setNamaPenyakit(event.target.value);
   };
 
   const onInputDNAHandler = (event) => {
     const reader = new FileReader();
     reader.onloadend = (e) => {
-      //   const content = e.target.result;
-      //   console.log('file content',  content)
       setSequenceDNA(e.target.result);
     };
     reader.readAsText(event.target.files[0]);
@@ -33,6 +31,11 @@ export const AddDNA = () => {
     };
     try {
       axiosConfig.post(`/penyakit`, qs.stringify(body)).then((res) => {
+        if (res.data.message === "OK") {
+          setMessage("Success Adding New Disease Sequence");
+        } else {
+          setMessage("Please Check Your Input")
+        }
         console.log(res);
       });
     } catch (err) {
@@ -60,6 +63,7 @@ export const AddDNA = () => {
             <p>Submit</p>
           </Button>
         </div>
+        <p className="message">{message}</p>
       </div>
     </Template>
   );
