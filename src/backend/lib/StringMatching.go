@@ -149,6 +149,6 @@ func HammingDistance(text string, pattern string) (int, float32) {
 
 	percentage = (float32(len(pattern) - min)) / (float32(len(pattern)))
 
-	return minpos, percentage
+	return minpos, percentage * 100
 
 }

@@ -4,9 +4,8 @@ type Hasil struct {
 	Tanggal   	  string `form:"tanggal" json:"tanggal"`
 	NamaPengguna  string `form:"namaPengguna" json:"namaPengguna"`
 	NamaPenyakit  string `form:"namaPenyakit" json:"namaPenyakit"`
-	Persentase    int    `json:"persentase"`
+	Persentase    float32    `json:"persentase"`
 	Hasil         bool   `json:"hasil"`
-	DNA		  	  string `form:"DNA" hasil:"DNA"`
 }
 
 type ResponseHasil struct {
