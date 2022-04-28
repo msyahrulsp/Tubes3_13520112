@@ -9,7 +9,7 @@ import { Form } from "../Component/Form";
 
 export const FindDNA = () => {
   const [query, setQuery] = useState("");
-  const [data, setData] = useState();
+  const [data, setData] = useState(null);
   const [message, setMessage] = useState();
 
   const onChangeQuery = (event) => {
@@ -24,11 +24,16 @@ export const FindDNA = () => {
       axiosConfig.post(`/hasil/find`, qs.stringify(body)).then((res) => {
         if (res.data.message === "OK") {
           setData(res.data.Data);
-          setMessage("");
+          if (res.data.Data === null) {
+            setMessage("No Data Found");
+          } else {
+            setMessage("");
+          }
         } else {
+          setData(null);
           setMessage("Please Check Your Input")
         }
-        console.log(res)
+        console.log(res);
       });
     } catch (err) {
       alert(err.toString());
@@ -54,7 +59,7 @@ export const FindDNA = () => {
           </Button>
         </div>
         <div className="finddna-result">
-          {data !== undefined ? data.map((item) => {
+          {data !== null ? data.map((item) => {
             let bool = item.hasil === 1 ? "True" : "False";
             return (
               <div className="finddna-result-item">

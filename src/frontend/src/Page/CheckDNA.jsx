@@ -12,7 +12,7 @@ export const CheckDNA = () => {
   const [namaPenyakit, setNamaPenyakit] = useState("");
   const [DNA, setDNA] = useState("");
   const [message, setMessage] = useState("");
-  const [data, setData] = useState();
+  const [data, setData] = useState(null);
 
   const onChangeDisease = (event) => {
     setNamaPenyakit(event.target.value);
@@ -40,8 +40,13 @@ export const CheckDNA = () => {
       axiosConfig.post(`/hasil`, qs.stringify(body)).then((res) => {
         if (res.data.message === "OK") {
           setData(res.data.Data);
-          setMessage("");
+          if (res.data.Data === null) {
+            setMessage("No Data Found");
+          } else {
+            setMessage("");
+          }
         } else {
+          setData(null);
           setMessage("Please Check Your Input")
         }
         console.log(res);
@@ -72,16 +77,17 @@ export const CheckDNA = () => {
             onChange={onChangeDisease}
           />
         </div>
-        <div className="addna-button" onClick={onSubmitHandler}>
+        <div className="checkna-button" onClick={onSubmitHandler}>
           <Button>
             <p>Submit</p>
           </Button>
         </div>
-        <div className="addna-result">
-          {data !== undefined ? data.map((item) => {
+        <div className="checkdna-result">
+          {data !== null ? data.map((item) => {
             let bool = item.hasil === 1 ? "True" : "False";
             return (
-              <div className="addna-result-item">
+              <div className="checkdna-result-item">
+                <h3>Result</h3>
                 <p>{item.tanggal} - {item.namaPengguna} - {item.namaPenyakit} - {item.persentase}% - {bool}</p>
               </div>
             );
