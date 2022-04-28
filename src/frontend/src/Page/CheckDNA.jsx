@@ -84,7 +84,7 @@ export const CheckDNA = () => {
         </div>
         <div className="checkdna-result">
           {data !== null ? data.map((item) => {
-            let bool = item.hasil === 1 ? "True" : "False";
+            let bool = item.hasil ? "True" : "False";
             return (
               <div className="checkdna-result-item">
                 <h3>Result</h3>

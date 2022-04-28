@@ -60,7 +60,7 @@ export const FindDNA = () => {
         </div>
         <div className="finddna-result">
           {data !== null ? data.map((item) => {
-            let bool = item.hasil === 1 ? "True" : "False";
+            let bool = item.hasil ? "True" : "False";
             return (
               <div className="finddna-result-item">
                 <p>{item.tanggal} - {item.namaPengguna} - {item.namaPenyakit} - {item.persentase}% - {bool}</p>
