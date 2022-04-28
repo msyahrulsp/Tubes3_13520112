@@ -82,13 +82,8 @@ func AddPenyakit(w http.ResponseWriter, r *http.Request) {
 	db := database.Connect()
 	defer db.Close()
 
-	err := r.ParseMultipartForm(32 << 20)
-	  if err != nil {
-		  panic(err)
-	  }
-
 	if lib.IsValidDNA(r.FormValue("sequenceDNA")) {
-		_, err = db.Exec("INSERT INTO Penyakit (NamaPenyakit, SequenceDNA) values (?,?)",
+		_, err := db.Exec("INSERT INTO Penyakit (NamaPenyakit, SequenceDNA) values (?,?)",
 			r.FormValue("namaPenyakit"),
 			r.FormValue("sequenceDNA"),
 		)

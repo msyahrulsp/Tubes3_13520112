@@ -7,6 +7,7 @@ export const Form = (props) => {
             <input 
                 type={props.type}
                 placeholder={props.placeholder}
+                onChange={props.onChange}
             />
             <p className="error">{props.error}</p>
         </div>
