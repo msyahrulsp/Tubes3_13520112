@@ -137,6 +137,9 @@ func AddHasil(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		response.Status = 404
 		response.Message = "Not Found"
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
 	}
 
 	for rows.Next() {
