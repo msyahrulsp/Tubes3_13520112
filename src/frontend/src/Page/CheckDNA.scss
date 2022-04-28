@@ -14,4 +14,17 @@
         flex-direction: row;
         gap: 100px;
     }
+
+    .message {
+        margin-top: 15px;
+    }
+
+    .checkdna-result {
+        margin-top: 25px;
+        &-item {
+            border: 1px solid #000000;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+    }
 }
