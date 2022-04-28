@@ -1,6 +1,8 @@
 import { React } from "react";
 import "./Home.scss";
 
+import { NavLink } from "react-router-dom";
+
 import { Template } from '../Templates/Template';
 import { Button } from '../Component/Button';
 
@@ -15,11 +17,14 @@ export const Home = () => {
                         <p>DNA Pattern Matching</p>
                     </div>
                     <h1>Try it Now!</h1>
-                    <a href="/add-dna">
+                    <NavLink
+                        exact
+                        to="/add-dna"
+                    >
                         <Button>
                             Add DNA
                         </Button>
-                    </a>
+                    </NavLink>
                 </div>
             </div>
         </Template>
