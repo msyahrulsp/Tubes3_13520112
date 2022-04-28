@@ -21,7 +21,6 @@ func GetHasilByQuery(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	q := lib.IsValidQuery(r.FormValue("query"))
-
 	if (q == -1) {
 		response.Status = 400
 		response.Message = "Bad Request"
@@ -82,7 +81,7 @@ func GetHasilByQuery(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	queries := strings.Split(r.FormValue("query"), " ")
+	queries := strings.SplitN(r.FormValue("query"), " ", 2)
 	date, err := time.Parse("02-01-2006", strings.ReplaceAll(queries[0], "/", "-"))
 		if err != nil {
 			panic(err)
