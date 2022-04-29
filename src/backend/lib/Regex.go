@@ -19,12 +19,6 @@ func IsValidQuery(input string) int {
 
 	var flag int = -1
 
-	// fmt.Println(regexDate31.FindAllString(input, -1))
-	// fmt.Println(regexDate30.FindAllString(input, -1))
-	// fmt.Println(regexDate29.FindAllString(input, -1))
-	// fmt.Println(regexDisease.FindAllString(input, -1))
-	// fmt.Println(regexFull.FindAllString(input, -1))
-
 	if regexDate31.MatchString(input) || regexDate30.MatchString(input) || regexDate29.MatchString(input) {
 		flag = 0 // Date
 	} else if regexDisease.MatchString(input) {
